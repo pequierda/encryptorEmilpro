@@ -10,26 +10,26 @@
 <body class="bg-gray-50 min-h-screen">
     <div class="container mx-auto px-4 py-8">
         <div class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-gray-800 mb-2">🔐 EmilPro Encryptor</h1>
-            <p class="text-gray-600">Military-grade client-side encryption</p>
-            <p class="text-sm text-green-600 mt-2">✅ 100% Browser-based • Zero Upload • Fully Private</p>
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">EmilPro Encryptor</h1>
+            <!-- <p class="text-gray-600">Military-grade client-side encryption</p> -->
+            <!-- <p class="text-sm text-green-600 mt-2">✅ 100% Browser-based • Zero Upload • Fully Private</p> -->
         </div>
 
         <div class="max-w-6xl mx-auto">
             <div class="flex justify-center mb-8">
                 <div class="inline-flex rounded-lg border border-gray-200 bg-white p-1">
                     <button onclick="switchTab('encrypt')" id="encryptTab" class="px-6 py-2 rounded-md bg-blue-600 text-white transition-colors">
-                        🔒 Encrypt
+                        Encrypt
                     </button>
                     <button onclick="switchTab('decrypt')" id="decryptTab" class="px-6 py-2 rounded-md text-gray-700 hover:bg-gray-100 transition-colors">
-                        🔓 Decrypt
+                        Decrypt
                     </button>
                 </div>
             </div>
 
             <div id="encryptPanel">
                 <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-                    <h2 class="text-2xl font-semibold text-gray-800 mb-6">📝 Text Encryption</h2>
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6">Text Encryption</h2>
                     <div class="grid md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Text to Encrypt</label>
@@ -43,16 +43,16 @@
                     <div class="mt-4 flex gap-4">
                         <input type="password" id="encryptTextPassword" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter encryption password">
                         <button onclick="encryptTextFunc()" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
-                            🔒 Encrypt Text
+                            Encrypt Text
                         </button>
                         <button onclick="copyToClipboard('encryptedText')" class="px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors">
-                            📋 Copy
+                            Copy
                         </button>
                     </div>
                 </div>
 
                 <div class="bg-white rounded-lg shadow-md p-6">
-                    <h2 class="text-2xl font-semibold text-gray-800 mb-6">📁 File Encryption</h2>
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6">File Encryption</h2>
                     <div class="max-w-xl mx-auto">
                         <div id="encryptDropZone" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-400 transition-colors cursor-pointer">
                             <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
@@ -65,7 +65,7 @@
                         <div class="mt-4 flex gap-4">
                             <input type="password" id="encryptFilePassword" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter encryption password">
                             <button onclick="encryptFileFunc()" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
-                                🔒 Encrypt File
+                               Encrypt File
                             </button>
                         </div>
                     </div>
@@ -74,7 +74,7 @@
 
             <div id="decryptPanel" class="hidden">
                 <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-                    <h2 class="text-2xl font-semibold text-gray-800 mb-6">📝 Text Decryption</h2>
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6">Text Decryption</h2>
                     <div class="grid md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Encrypted Text</label>
@@ -88,16 +88,16 @@
                     <div class="mt-4 flex gap-4">
                         <input type="password" id="decryptTextPassword" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter decryption password">
                         <button onclick="decryptTextFunc()" class="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
-                            🔓 Decrypt Text
+                            Decrypt Text
                         </button>
                         <button onclick="copyToClipboard('decryptedText')" class="px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors">
-                            📋 Copy
+                            Copy
                         </button>
                     </div>
                 </div>
 
                 <div class="bg-white rounded-lg shadow-md p-6">
-                    <h2 class="text-2xl font-semibold text-gray-800 mb-6">📁 File Decryption</h2>
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6">File Decryption</h2>
                     <div class="max-w-xl mx-auto">
                         <div id="decryptDropZone" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-green-400 transition-colors cursor-pointer">
                             <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
@@ -110,7 +110,7 @@
                         <div class="mt-4 flex gap-4">
                             <input type="password" id="decryptFilePassword" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter decryption password">
                             <button onclick="decryptFileFunc()" class="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
-                                🔓 Decrypt File
+                                 Decrypt File
                             </button>
                         </div>
                     </div>
@@ -135,7 +135,7 @@
                             <li>✅ 100% client-side processing</li>
                             <li>✅ No server upload</li>
                             <li>✅ No data storage</li>
-                            <li>✅ Works offline</li>
+                            <!-- <li>✅ Works offline</li> -->
                         </ul>
                     </div>
                     <div>
