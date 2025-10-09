@@ -1,0 +1,13 @@
+*.php
+admin_*.php
+api.php
+encryption.php
+setup.php
+logout.php
+decrypt.php
+encrypt.php
+admin_config.enc
+admin_lock.dat
+openssl.cnf
+README.md
+

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EmilPro Encryptor - Secure File Encryption</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css" rel="stylesheet" />
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">🔐 EmilPro Encryptor</h1>
+            <p class="text-gray-600">Military-grade client-side encryption</p>
+            <p class="text-sm text-green-600 mt-2">✅ 100% Browser-based • Zero Upload • Fully Private</p>
+        </div>
+
+        <div class="max-w-6xl mx-auto">
+            <div class="flex justify-center mb-8">
+                <div class="inline-flex rounded-lg border border-gray-200 bg-white p-1">
+                    <button onclick="switchTab('encrypt')" id="encryptTab" class="px-6 py-2 rounded-md bg-blue-600 text-white transition-colors">
+                        🔒 Encrypt
+                    </button>
+                    <button onclick="switchTab('decrypt')" id="decryptTab" class="px-6 py-2 rounded-md text-gray-700 hover:bg-gray-100 transition-colors">
+                        🔓 Decrypt
+                    </button>
+                </div>
+            </div>
+
+            <div id="encryptPanel">
+                <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6">📝 Text Encryption</h2>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Text to Encrypt</label>
+                            <textarea id="encryptText" rows="6" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter text to encrypt"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Encrypted Result</label>
+                            <textarea id="encryptedText" rows="6" class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50" placeholder="Encrypted text will appear here" readonly></textarea>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex gap-4">
+                        <input type="password" id="encryptTextPassword" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter encryption password">
+                        <button onclick="encryptTextFunc()" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                            🔒 Encrypt Text
+                        </button>
+                        <button onclick="copyToClipboard('encryptedText')" class="px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors">
+                            📋 Copy
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6">📁 File Encryption</h2>
+                    <div class="max-w-xl mx-auto">
+                        <div id="encryptDropZone" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-400 transition-colors cursor-pointer">
+                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <p class="mt-2 text-sm text-gray-600">Drag and drop a file or click to select</p>
+                            <p id="encryptFileName" class="text-xs text-gray-500 mt-1"></p>
+                        </div>
+                        <input type="file" id="encryptFileInput" class="hidden" />
+                        <div class="mt-4 flex gap-4">
+                            <input type="password" id="encryptFilePassword" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter encryption password">
+                            <button onclick="encryptFileFunc()" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                                🔒 Encrypt File
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="decryptPanel" class="hidden">
+                <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6">📝 Text Decryption</h2>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Encrypted Text</label>
+                            <textarea id="decryptText" rows="6" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Paste encrypted text here"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Decrypted Result</label>
+                            <textarea id="decryptedText" rows="6" class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50" placeholder="Decrypted text will appear here" readonly></textarea>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex gap-4">
+                        <input type="password" id="decryptTextPassword" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter decryption password">
+                        <button onclick="decryptTextFunc()" class="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
+                            🔓 Decrypt Text
+                        </button>
+                        <button onclick="copyToClipboard('decryptedText')" class="px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors">
+                            📋 Copy
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6">📁 File Decryption</h2>
+                    <div class="max-w-xl mx-auto">
+                        <div id="decryptDropZone" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-green-400 transition-colors cursor-pointer">
+                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <p class="mt-2 text-sm text-gray-600">Drag and drop encrypted file or click to select</p>
+                            <p id="decryptFileName" class="text-xs text-gray-500 mt-1">Select .emilpro file</p>
+                        </div>
+                        <input type="file" id="decryptFileInput" class="hidden" accept=".emilpro" />
+                        <div class="mt-4 flex gap-4">
+                            <input type="password" id="decryptFilePassword" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter decryption password">
+                            <button onclick="decryptFileFunc()" class="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
+                                🔓 Decrypt File
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6 mt-8">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">🛡️ Security Features</h2>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-700 mb-3">Encryption</h3>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li>✅ AES-256-GCM</li>
+                            <li>✅ PBKDF2 (100K iterations)</li>
+                            <li>✅ Random salt/IV generation</li>
+                            <li>✅ Browser Web Crypto API</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-700 mb-3">Privacy</h3>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li>✅ 100% client-side processing</li>
+                            <li>✅ No server upload</li>
+                            <li>✅ No data storage</li>
+                            <li>✅ Works offline</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-700 mb-3">Format</h3>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li>✅ .emilpro extension</li>
+                            <li>✅ Preserves original filenames</li>
+                            <li>✅ Binary file support</li>
+                            <li>✅ Base64 encoded output</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="fixed top-4 right-4 z-50 hidden">
+        <div class="bg-white border-l-4 p-4 shadow-lg rounded-md max-w-sm">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <span id="toastIcon" class="text-2xl"></span>
+                </div>
+                <div class="ml-3">
+                    <p id="toastMessage" class="text-sm font-medium text-gray-800"></p>
+                </div>
+                <div class="ml-auto pl-3">
+                    <button onclick="hideNotification()" class="text-gray-400 hover:text-gray-600">×</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loadingOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <div class="flex items-center">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                    <span class="ml-3 text-gray-700" id="loadingText">Processing...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
+    <script>
+        let encryptFile = null;
+        let decryptFile = null;
+
+        function switchTab(tab) {
+            if (tab === 'encrypt') {
+                document.getElementById('encryptPanel').classList.remove('hidden');
+                document.getElementById('decryptPanel').classList.add('hidden');
+                document.getElementById('encryptTab').classList.add('bg-blue-600', 'text-white');
+                document.getElementById('encryptTab').classList.remove('text-gray-700', 'hover:bg-gray-100');
+                document.getElementById('decryptTab').classList.remove('bg-blue-600', 'text-white');
+                document.getElementById('decryptTab').classList.add('text-gray-700', 'hover:bg-gray-100');
+            } else {
+                document.getElementById('encryptPanel').classList.add('hidden');
+                document.getElementById('decryptPanel').classList.remove('hidden');
+                document.getElementById('decryptTab').classList.add('bg-blue-600', 'text-white');
+                document.getElementById('decryptTab').classList.remove('text-gray-700', 'hover:bg-gray-100');
+                document.getElementById('encryptTab').classList.remove('bg-blue-600', 'text-white');
+                document.getElementById('encryptTab').classList.add('text-gray-700', 'hover:bg-gray-100');
+            }
+        }
+
+        document.getElementById('encryptDropZone').addEventListener('click', () => document.getElementById('encryptFileInput').click());
+        document.getElementById('encryptDropZone').addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.currentTarget.classList.add('border-blue-400', 'bg-blue-50');
+        });
+        document.getElementById('encryptDropZone').addEventListener('dragleave', (e) => {
+            e.currentTarget.classList.remove('border-blue-400', 'bg-blue-50');
+        });
+        document.getElementById('encryptDropZone').addEventListener('drop', (e) => {
+            e.preventDefault();
+            e.currentTarget.classList.remove('border-blue-400', 'bg-blue-50');
+            if (e.dataTransfer.files.length > 0) {
+                encryptFile = e.dataTransfer.files[0];
+                document.getElementById('encryptFileName').textContent = `Selected: ${encryptFile.name}`;
+            }
+        });
+        document.getElementById('encryptFileInput').addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                encryptFile = e.target.files[0];
+                document.getElementById('encryptFileName').textContent = `Selected: ${encryptFile.name}`;
+            }
+        });
+
+        document.getElementById('decryptDropZone').addEventListener('click', () => document.getElementById('decryptFileInput').click());
+        document.getElementById('decryptDropZone').addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.currentTarget.classList.add('border-green-400', 'bg-green-50');
+        });
+        document.getElementById('decryptDropZone').addEventListener('dragleave', (e) => {
+            e.currentTarget.classList.remove('border-green-400', 'bg-green-50');
+        });
+        document.getElementById('decryptDropZone').addEventListener('drop', (e) => {
+            e.preventDefault();
+            e.currentTarget.classList.remove('border-green-400', 'bg-green-50');
+            if (e.dataTransfer.files.length > 0) {
+                decryptFile = e.dataTransfer.files[0];
+                document.getElementById('decryptFileName').textContent = `Selected: ${decryptFile.name}`;
+            }
+        });
+        document.getElementById('decryptFileInput').addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                decryptFile = e.target.files[0];
+                document.getElementById('decryptFileName').textContent = `Selected: ${decryptFile.name}`;
+            }
+        });
+
+        async function deriveKey(password, salt) {
+            const enc = new TextEncoder();
+            const keyMaterial = await crypto.subtle.importKey(
+                'raw',
+                enc.encode(password),
+                'PBKDF2',
+                false,
+                ['deriveBits', 'deriveKey']
+            );
+            return crypto.subtle.deriveKey(
+                {
+                    name: 'PBKDF2',
+                    salt: salt,
+                    iterations: 100000,
+                    hash: 'SHA-256'
+                },
+                keyMaterial,
+                { name: 'AES-GCM', length: 256 },
+                false,
+                ['encrypt', 'decrypt']
+            );
+        }
+
+        async function encryptData(data, password) {
+            const salt = crypto.getRandomValues(new Uint8Array(16));
+            const iv = crypto.getRandomValues(new Uint8Array(12));
+            const key = await deriveKey(password, salt);
+            const enc = new TextEncoder();
+            const encrypted = await crypto.subtle.encrypt(
+                { name: 'AES-GCM', iv: iv },
+                key,
+                typeof data === 'string' ? enc.encode(data) : data
+            );
+            
+            const result = new Uint8Array(salt.length + iv.length + encrypted.byteLength);
+            result.set(salt, 0);
+            result.set(iv, salt.length);
+            result.set(new Uint8Array(encrypted), salt.length + iv.length);
+            
+            return btoa(String.fromCharCode(...result));
+        }
+
+        async function decryptData(encryptedData, password) {
+            const data = new Uint8Array(atob(encryptedData).split('').map(c => c.charCodeAt(0)));
+            const salt = data.slice(0, 16);
+            const iv = data.slice(16, 28);
+            const encrypted = data.slice(28);
+            
+            const key = await deriveKey(password, salt);
+            const decrypted = await crypto.subtle.decrypt(
+                { name: 'AES-GCM', iv: iv },
+                key,
+                encrypted
+            );
+            
+            return decrypted;
+        }
+
+        async function encryptTextFunc() {
+            const text = document.getElementById('encryptText').value;
+            const password = document.getElementById('encryptTextPassword').value;
+            
+            if (!text || !password) {
+                showNotification('Please enter text and password', 'error');
+                return;
+            }
+            
+            showLoading('Encrypting text...');
+            try {
+                const encrypted = await encryptData(text, password);
+                document.getElementById('encryptedText').value = encrypted;
+                showNotification('Text encrypted successfully!', 'success');
+            } catch (error) {
+                showNotification('Encryption failed: ' + error.message, 'error');
+            }
+            hideLoading();
+        }
+
+        async function decryptTextFunc() {
+            const text = document.getElementById('decryptText').value;
+            const password = document.getElementById('decryptTextPassword').value;
+            
+            if (!text || !password) {
+                showNotification('Please enter encrypted text and password', 'error');
+                return;
+            }
+            
+            showLoading('Decrypting text...');
+            try {
+                const decrypted = await decryptData(text, password);
+                const dec = new TextDecoder();
+                document.getElementById('decryptedText').value = dec.decode(decrypted);
+                showNotification('Text decrypted successfully!', 'success');
+            } catch (error) {
+                showNotification('Decryption failed: wrong password or corrupted data', 'error');
+            }
+            hideLoading();
+        }
+
+        async function encryptFileFunc() {
+            if (!encryptFile) {
+                showNotification('Please select a file', 'error');
+                return;
+            }
+            const password = document.getElementById('encryptFilePassword').value;
+            if (!password) {
+                showNotification('Please enter a password', 'error');
+                return;
+            }
+            
+            showLoading('Encrypting file...');
+            try {
+                const fileData = await encryptFile.arrayBuffer();
+                const fileInfo = {
+                    name: encryptFile.name,
+                    type: encryptFile.type,
+                    size: encryptFile.size
+                };
+                
+                const combined = new Uint8Array(
+                    new TextEncoder().encode(JSON.stringify(fileInfo) + '|||').length + fileData.byteLength
+                );
+                const header = new TextEncoder().encode(JSON.stringify(fileInfo) + '|||');
+                combined.set(header, 0);
+                combined.set(new Uint8Array(fileData), header.length);
+                
+                const encrypted = await encryptData(combined, password);
+                
+                const blob = new Blob([encrypted], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = encryptFile.name + '.emilpro';
+                a.click();
+                URL.revokeObjectURL(url);
+                
+                showNotification('File encrypted successfully!', 'success');
+            } catch (error) {
+                showNotification('Encryption failed: ' + error.message, 'error');
+            }
+            hideLoading();
+        }
+
+        async function decryptFileFunc() {
+            if (!decryptFile) {
+                showNotification('Please select a file', 'error');
+                return;
+            }
+            const password = document.getElementById('decryptFilePassword').value;
+            if (!password) {
+                showNotification('Please enter a password', 'error');
+                return;
+            }
+            
+            showLoading('Decrypting file...');
+            try {
+                const encryptedText = await decryptFile.text();
+                const decrypted = await decryptData(encryptedText, password);
+                
+                const combined = new Uint8Array(decrypted);
+                const combinedText = new TextDecoder().decode(combined);
+                const separatorIndex = combinedText.indexOf('|||');
+                const fileInfo = JSON.parse(combinedText.substring(0, separatorIndex));
+                const fileData = combined.slice(new TextEncoder().encode(combinedText.substring(0, separatorIndex) + '|||').length);
+                
+                const blob = new Blob([fileData], { type: fileInfo.type || 'application/octet-stream' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileInfo.name;
+                a.click();
+                URL.revokeObjectURL(url);
+                
+                showNotification('File decrypted successfully!', 'success');
+            } catch (error) {
+                showNotification('Decryption failed: wrong password or corrupted file', 'error');
+            }
+            hideLoading();
+        }
+
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            element.select();
+            document.execCommand('copy');
+            showNotification('Copied to clipboard!', 'success');
+        }
+
+        function showNotification(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            const toastIcon = document.getElementById('toastIcon');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toastIcon.textContent = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
+            toastMessage.textContent = message;
+            
+            const borderColor = type === 'success' ? 'border-green-400' : type === 'error' ? 'border-red-400' : 'border-blue-400';
+            toast.firstElementChild.className = `bg-white ${borderColor} border-l-4 p-4 shadow-lg rounded-md max-w-sm`;
+            
+            toast.classList.remove('hidden');
+            setTimeout(() => hideNotification(), 5000);
+        }
+
+        function hideNotification() {
+            document.getElementById('toast').classList.add('hidden');
+        }
+
+        function showLoading(text = 'Processing...') {
+            document.getElementById('loadingText').textContent = text;
+            document.getElementById('loadingOverlay').classList.remove('hidden');
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

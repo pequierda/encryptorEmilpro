@@ -1,0 +1,58 @@
+# OpenSSL configuration file for XAMPP
+# This file provides basic OpenSSL configuration for RSA key generation
+
+[ req ]
+default_bits = 2048
+distinguished_name = req_distinguished_name
+req_extensions = v3_req
+prompt = no
+
+[ req_distinguished_name ]
+C = US
+ST = State
+L = City
+O = Organization
+OU = Organizational Unit
+CN = Common Name
+
+[ v3_req ]
+basicConstraints = CA:FALSE
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+
+[ ca ]
+default_ca = CA_default
+
+[ CA_default ]
+dir = .
+certs = $dir
+crl_dir = $dir/crl
+database = $dir/index.txt
+new_certs_dir = $dir/newcerts
+certificate = $dir/cacert.pem
+serial = $dir/serial
+crl = $dir/crl.pem
+private_key = $dir/private/cakey.pem
+RANDFILE = $dir/private/.rand
+x509_extensions = usr_cert
+name_opt = ca_default
+cert_opt = ca_default
+default_days = 365
+default_crl_days = 30
+default_md = sha256
+preserve = no
+policy = policy_match
+
+[ policy_match ]
+countryName = match
+stateOrProvinceName = match
+organizationName = match
+organizationalUnitName = optional
+commonName = supplied
+emailAddress = optional
+
+[ usr_cert ]
+basicConstraints = CA:FALSE
+nsCertType = client, email
+nsComment = "OpenSSL Generated Client Certificate"
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer
