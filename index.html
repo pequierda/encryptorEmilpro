@@ -188,10 +188,35 @@
         </div>
     </div>
 
+    <div id="captchaModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <div class="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
+                <div class="text-center mb-4">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Security Verification</h3>
+                    <p class="text-sm text-gray-600">Please solve this to continue</p>
+                </div>
+                <div class="bg-gray-100 p-4 rounded-lg mb-4 text-center">
+                    <p class="text-2xl font-bold text-gray-800" id="captchaQuestion"></p>
+                </div>
+                <input type="text" id="captchaInput" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4" placeholder="Your answer" autocomplete="off">
+                <div class="flex gap-2">
+                    <button onclick="verifyCaptcha()" class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                        Verify
+                    </button>
+                    <button onclick="refreshCaptcha()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">
+                        🔄
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
     <script>
         let encryptFile = null;
         let decryptFile = null;
+        let captchaPassed = false;
+        let captchaAnswer = 0;
 
         function switchTab(tab) {
             if (tab === 'encrypt') {
@@ -316,6 +341,11 @@
         }
 
         async function encryptTextFunc() {
+            if (!captchaPassed) {
+                showCaptcha();
+                return;
+            }
+            
             const text = document.getElementById('encryptText').value;
             const password = document.getElementById('encryptTextPassword').value;
             
@@ -357,6 +387,11 @@
         }
 
         async function encryptFileFunc() {
+            if (!captchaPassed) {
+                showCaptcha();
+                return;
+            }
+            
             if (!encryptFile) {
                 showNotification('Please select a file', 'error');
                 return;
@@ -471,6 +506,61 @@
         function hideLoading() {
             document.getElementById('loadingOverlay').classList.add('hidden');
         }
+
+        function generateCaptcha() {
+            const num1 = Math.floor(Math.random() * 20) + 1;
+            const num2 = Math.floor(Math.random() * 20) + 1;
+            const operations = ['+', '-', '×'];
+            const operation = operations[Math.floor(Math.random() * operations.length)];
+            
+            let question = `${num1} ${operation} ${num2} = ?`;
+            
+            if (operation === '+') {
+                captchaAnswer = num1 + num2;
+            } else if (operation === '-') {
+                captchaAnswer = num1 - num2;
+            } else {
+                captchaAnswer = num1 * num2;
+            }
+            
+            document.getElementById('captchaQuestion').textContent = question;
+        }
+
+        function showCaptcha() {
+            generateCaptcha();
+            document.getElementById('captchaInput').value = '';
+            document.getElementById('captchaModal').classList.remove('hidden');
+            document.getElementById('captchaInput').focus();
+        }
+
+        function hideCaptcha() {
+            document.getElementById('captchaModal').classList.add('hidden');
+        }
+
+        function verifyCaptcha() {
+            const userAnswer = parseInt(document.getElementById('captchaInput').value);
+            
+            if (userAnswer === captchaAnswer) {
+                captchaPassed = true;
+                hideCaptcha();
+                showNotification('CAPTCHA verified! You can now encrypt.', 'success');
+            } else {
+                showNotification('Incorrect answer. Please try again.', 'error');
+                refreshCaptcha();
+            }
+        }
+
+        function refreshCaptcha() {
+            generateCaptcha();
+            document.getElementById('captchaInput').value = '';
+            document.getElementById('captchaInput').focus();
+        }
+
+        document.getElementById('captchaInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                verifyCaptcha();
+            }
+        });
     </script>
 </body>
 </html>
